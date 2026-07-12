@@ -1,0 +1,22 @@
+using ProjectTracker.Application.Interfaces;
+using ProjectTracker.Domain.Entities;
+using ProjectTracker.Infrastructure.Data;
+
+namespace ProjectTracker.Infrastructure.Repositories;
+
+public class TaskRepository : ITaskRepository
+{
+    private readonly AppDbContext _context;
+
+    public TaskRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task AddAsync(TaskItem task, CancellationToken cancellationToken)
+    {
+        await _context.TaskItems.AddAsync(task, cancellationToken);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}

@@ -34,6 +34,7 @@ public class TaskItemTests
     {
         var description = "this should fail";
 
-        Assert.Throws<ArgumentException>(() => new TaskItem(invalidTitle, description));
+        // Use null-forgiving operator to satisfy nullable warnings in tests where null is expected
+        Assert.Throws<ArgumentException>(() => new TaskItem(invalidTitle!, description));
     }
 }

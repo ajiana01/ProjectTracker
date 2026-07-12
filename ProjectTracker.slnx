@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ProjectTracker.Application/ProjectTracker.Application.csproj" />
+  <Project Path="ProjectTracker.Domain/ProjectTracker.Domain.csproj" />
+  <Project Path="ProjectTracker.Infrastructure/ProjectTracker.Infrastructure.csproj" />
+  <Project Path="ProjectTracker.Tests/ProjectTracker.Tests.csproj" />
+  <Project Path="ProjectTracker.WebApi/ProjectTracker.WebApi.csproj" />
+</Solution>

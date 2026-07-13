@@ -1,4 +1,3 @@
-
 namespace ProjectTracker.Domain.Entities;
 
 public class TaskItem
@@ -30,5 +29,10 @@ public class TaskItem
         Description = description;
         Status = Enums.TaskStatus.ToDo;
         UserId = userId;
+    }
+
+    public void UpdateStatus(Enums.TaskStatus newStatus)
+    {
+        Status = newStatus;
     }
 }

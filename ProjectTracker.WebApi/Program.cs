@@ -115,6 +115,15 @@ app.MapGet("/api/tasks", async (ClaimsPrincipal user,IMediator mediator) =>
     return Results.Ok(tasks);
 }).RequireAuthorization();
 
+// endpoint put status
+app.MapPut("/api/tasks/{id}/status", async (Guid id, UpdateTaskStatusCommand command, ClaimsPrincipal user, IMediator mediator) =>
+{
+    var userId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
+    var secureCommand = command with {Id = id, UserId = userId!};
+    var result = await mediator.Send(secureCommand);
+    return result ? Results.NoContent() : Results.NotFound("Task not found, status not valid, or access denied.");
+}).RequireAuthorization();
+
 app.Run();
 
 

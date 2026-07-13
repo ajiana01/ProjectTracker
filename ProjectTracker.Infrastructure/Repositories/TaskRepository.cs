@@ -25,4 +25,15 @@ public class TaskRepository : ITaskRepository
     {
         return await _context.TaskItems.AsNoTracking().ToListAsync(cancellationToken);
     }
+
+    public async Task<TaskItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.TaskItems.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
+
+    public async Task UpdateAsync(TaskItem task, CancellationToken cancellationToken)
+    {
+        _context.TaskItems.Update(task);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

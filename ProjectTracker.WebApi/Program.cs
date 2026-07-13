@@ -1,41 +1,45 @@
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using ProjectTracker.Application.Interfaces;
+using ProjectTracker.Application.Tasks.Commands;
+using ProjectTracker.Infrastructure.Data;
+using ProjectTracker.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Dependency Injection
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=projecttracker.db"));
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
+builder.Services.AddMediatR( cfg => cfg.RegisterServicesFromAssembly(typeof(CreateTaskCommand).Assembly));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// hack: automatic create file db projecttracker.db when apps run first time
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+// END POINT definition
+app.MapPost("/api/tasks", async (CreateTaskCommand command, IMediator mediator) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    var taskId = await mediator.Send(command);
+    return Results.Ok(taskId);
+});
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+
+// expose program class for testing
+public partial class Program {}
+
+// public static class DbContextOptionsBuilderExtensions
+// {
+//     public static DbContextOptionsBuilder UseInMemoryDatabase(this DbContextOptionsBuilder optionsBuilder, string databaseName)
+//     {
+//         return optionsBuilder;
+//     }
+// }

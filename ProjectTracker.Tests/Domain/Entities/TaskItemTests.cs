@@ -12,9 +12,10 @@ public class TaskItemTests
         //ARRANGE
         var title = "Setup CI/CD Pipeline";
         var description = "Configure GitHub Actions for the backend";
+        var userId = "dummy-user-id";
 
         //ACT
-        var task = new TaskItem(title, description);
+        var task = new TaskItem(title, description, userId);
 
         //ASSERT
         Assert.NotNull(task);
@@ -33,8 +34,9 @@ public class TaskItemTests
     public void Constructor_WithEmptyTitle_ShouldThrowArgumentException(string? invalidTitle)
     {
         var description = "this should fail";
+        var userId = "dummy-user-id";
 
         // Use null-forgiving operator to satisfy nullable warnings in tests where null is expected
-        Assert.Throws<ArgumentException>(() => new TaskItem(invalidTitle!, description));
+        Assert.Throws<ArgumentException>(() => new TaskItem(invalidTitle!, description, userId));
     }
 }

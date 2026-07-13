@@ -15,7 +15,7 @@ public class GetAllTasksQueryHandler : IRequestHandler<GetAllTaskQuery, IEnumera
     public async Task<IEnumerable<TaskItemDto>> Handle(GetAllTaskQuery request, CancellationToken cancellationToken)
     {
         var tasks = await _taskRepository.GetAllAsync(cancellationToken);
-        return tasks.Select( t => new TaskItemDto(
+        return tasks.Where( t => t.UserId == request.UserId).Select( t => new TaskItemDto(
             t.Id,
             t.Title,
             t.Description,

@@ -16,7 +16,7 @@ public class TaskRepositoryTests
         
         using var context = new AppDbContext(builder.Options);
         var repository = new TaskRepository(context);
-        var task = new TaskItem("Test Integration", "Testing EF Core Repository");
+        var task = new TaskItem("Test Integration", "Testing EF Core Repository","dummy-user-id");
 
         //Act
         await repository.AddAsync(task, CancellationToken.None);

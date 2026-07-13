@@ -1,5 +1,3 @@
-using System;
-using ProjectTracker.Domain.Enums;
 
 namespace ProjectTracker.Domain.Entities;
 
@@ -9,8 +7,18 @@ public class TaskItem
     public string Title {get; private set;}
     public string Description {get; private set;}
     public Enums.TaskStatus Status {get; private set;}
+    public string UserId {get; private set;}
 
-    public TaskItem(string title, string description)
+    protected TaskItem()
+    {
+        Id = Guid.Empty;
+        Title = string.Empty;
+        Description = string.Empty;
+        Status = Enums.TaskStatus.ToDo;
+        UserId = string.Empty;
+    }
+
+    public TaskItem(string title, string description, string userId)
     {
         if (string.IsNullOrWhiteSpace(title))
         {
@@ -20,6 +28,7 @@ public class TaskItem
         Id = Guid.NewGuid();
         Title = title;
         Description = description;
-        Status = ProjectTracker.Domain.Enums.TaskStatus.ToDo;
+        Status = Enums.TaskStatus.ToDo;
+        UserId = userId;
     }
 }

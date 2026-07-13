@@ -1,5 +1,3 @@
-
-
 using MediatR;
 using ProjectTracker.Application.Interfaces;
 using ProjectTracker.Domain.Entities;
@@ -17,7 +15,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Guid>
 
     public async Task<Guid> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        var task = new TaskItem(request.Title, request.Description);
+        var task = new TaskItem(request.Title, request.Description, request.UserId);
 
         await _taskRepository.AddAsync(task, cancellationToken);
 

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Application.Interfaces;
 using ProjectTracker.Domain.Entities;
 using ProjectTracker.Infrastructure.Data;
@@ -18,5 +19,10 @@ public class TaskRepository : ITaskRepository
         await _context.TaskItems.AddAsync(task, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<TaskItem>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.TaskItems.AsNoTracking().ToListAsync(cancellationToken);
     }
 }

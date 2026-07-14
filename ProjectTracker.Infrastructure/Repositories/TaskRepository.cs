@@ -21,6 +21,12 @@ public class TaskRepository : ITaskRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task DeleteAsync(TaskItem task, CancellationToken cancellationToken)
+    {
+        _context.TaskItems.Remove(task);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<TaskItem>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.TaskItems.AsNoTracking().ToListAsync(cancellationToken);

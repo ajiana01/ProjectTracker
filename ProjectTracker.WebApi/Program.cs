@@ -124,6 +124,14 @@ app.MapPut("/api/tasks/{id}/status", async (Guid id, UpdateTaskStatusCommand com
     return result ? Results.NoContent() : Results.NotFound("Task not found, status not valid, or access denied.");
 }).RequireAuthorization();
 
+// endpoint delete task
+app.MapDelete("/api/tasks/{id}", async (Guid id, ClaimsPrincipal user, IMediator mediator) =>
+{
+    var userId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
+    var result = await mediator.Send(new DeleteTaskCommand(id, userId!));
+    return result ? Results.NoContent(): Results.NotFound("Task not found or access denied.");
+}).RequireAuthorization();
+
 app.Run();
 
 
